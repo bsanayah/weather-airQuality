@@ -84,35 +84,36 @@ if category == "By City, State, and Country":
         
     
     
-    if state_selected:
+                if state_selected:
 
-                    # TODO: Generate the list of cities, and add a select box for the user to choose the city
-                    #SB: TASK3***********************
-                    cities_dict=generate_list_of_cities()
-                    if cities_dict["status"] == "success":
-                        cities_list=[]
-                        for i in cities_dict["data"]:
-                            cities_list.append(i["city"])
-                        states_list.insert(0,"")
+                                # TODO: Generate the list of cities, and add a select box for the user to choose the city
+                                #SB TASK3********
+                                city_dict=generate_list_of_cities()
+                                if city_dict["status"] == "success":
+                                    cities_list=[]
+                                for i in city_dict["data"]:
+                                    cities_list.append(i["city"])
+                                cities_list.insert(0,"")
 
-                        state_selected = st.selectbox("Select a city", options=
-                                                        cities_list)
-                        
+                                city_selected = st.selectbox("Select a city", options=
+                                                            cities_list)
 
+                                if city_selected:
+                                        aqi_data_url = f"https://api.airvisual.com/v2/city?city={city_selected}&state={state_selected}&country={country_selected}&key={api_key}"
+                                        aqi_data_dict = requests.get(aqi_data_url).json()
+                                        # TODO: Display the weather and air quality data as shown in the video and description of the assignment
+                                        #SB TASK4********
 
-                    if aqi_data_dict["status"] == "success":
-                                # TODO: Display the weather and air quality data as shown in the video and description of the assignment
-                            else:
-                            st.warning("No data available for this location.")
-
-                    else:
-                        st.warning("No stations available, please select another state.")
-            else:
-                st.warning("No stations available, please select another country.")
-    else:
-        st.error("Too many requests. Wait for a few minutes before your next API call.")
-
-
+                                        if aqi_data_dict["status"] == "success":
+                                            st.subheader("Weather and Air Quality Data")
+                                            current = aqi_data_dict["data"]["current"]
+                                            st.write(f"Weather: {current['weather']['tp']}°C, {current['weather']['hu']}% humidity")
+                                            st.write(f"AQI: {current['pollution']['aqius']} (US AQI), {current['pollution']['mainus']}")
+                                        else:
+                                            st.warning("No data available for this location.")
+                                else:
+                                    st.warning("No cities available for the selected state and country.")
+                       
 elif category == "By Nearest City (IP Address)":
     url = f"https://api.airvisual.com/v2/nearest_city?key={api_key}"
     aqi_data_dict = requests.get(url).json()
@@ -120,6 +121,10 @@ elif category == "By Nearest City (IP Address)":
     if aqi_data_dict["status"] == "success":
     # TODO: Display the weather and air quality data as shown in the video and description of the assignment
     #SB: TASK5****************
+        st.subheader("Weather and Air Quality Data")
+        current = aqi_data_dict["data"]["current"]
+        st.write(f"Weather: {current['weather']['tp']}°C, {current['weather']['hu']}% humidity")
+        st.write(f"AQI: {current['pollution']['aqius']} (US AQI), {current['pollution']['mainus']}")
 
     else:
         st.warning("No data available for this location.")
@@ -139,5 +144,10 @@ elif category == "By Latitude and Longitude":
         if aqi_data_dict["status"] == "success":
         # TODO: Display the weather and air quality data as shown in the video and description of the assignment
         #SB: TASK 7******************
-            else:
+            st.subheader("Weather and Air Quality Data")
+            current = aqi_data_dict["data"]["current"]
+            st.write(f"Weather: {current['weather']['tp']}°C, {current['weather']['hu']}% humidity")
+            st.write(f"AQI: {current['pollution']['aqius']} (US AQI), {current['pollution']['mainus']}")
+            
+        else:
             st.warning("No data available for this location.")

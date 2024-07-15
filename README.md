@@ -1,6 +1,6 @@
 # 🎈 Blank app template
 
-A simple Streamlit app template for you to modify!
+This is a web app for my CAP 4104 Class. The template was provided by our teacher
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
 
@@ -15,5 +15,5 @@ A simple Streamlit app template for you to modify!
 2. Run the app
 
    ```
-   $ streamlit run streamlit_app.py
+   $ streamlit run web_app.py
    ```
